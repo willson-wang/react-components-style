@@ -5,7 +5,7 @@ interface AvatarType {
 }
 
 const Avatar: React.FC<AvatarType> = ({ className }: AvatarType) => (
-  <span className={`ss-avatar ${className ?? ''}`}>头像</span>
+  <span className={`ant-avatar ${className ?? ''}`}>头像</span>
 );
 
 Avatar.defaultProps = {

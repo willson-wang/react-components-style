@@ -59,7 +59,7 @@ require('./index.less');
           name: 'components.less',
           fileName: `${dest}/components.less`,
           type: 'asset',
-          source: code,
+          source: `${code};`,
         });
       }
 
