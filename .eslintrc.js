@@ -19,5 +19,7 @@ module.exports = {
   rules: {
     quotes: [2, 'single'], // 字符串必须使用单引号
     semi: [2, 'always'], // 语句必须分号结尾
+    '@typescript-eslint/no-explicit-any': 0,
+    '@typescript-eslint/no-var-requires': 0,
   },
 };

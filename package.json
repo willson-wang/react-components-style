@@ -34,6 +34,7 @@
   },
   "scripts": {
     "clean": "rm -rf lib es dist",
+    "dev": "rollup -c ./rollup.config.js -w",
     "build": "pnpm clean && rollup -c ./rollup.config.js",
     "setPushFollowTags": "echo '本地项目设置git push代码时自动push tag' && git config push.followtags true",
     "version:pre": "echo '发布预发布beta版本' && standard-version --prerelease beta",
@@ -49,6 +50,8 @@
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.22.9",
     "@babel/preset-env": "^7.22.9",
+    "@commitlint/cli": "^17.6.7",
+    "@commitlint/config-angular": "^17.6.7",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^25.0.3",
     "@rollup/plugin-json": "^6.0.0",

@@ -8,6 +8,8 @@ const postcss = require('rollup-plugin-postcss');
 const path = require('path');
 const glob = require('glob');
 
+const { ROLLUP_WATCH } = process.env;
+
 function createCssAndIndexFile({ dest, format, file, files }) {
   return {
     name: 'createCssAndIndexFile',
@@ -78,7 +80,7 @@ function createComponentsLessFile() {
       });
       this.emitFile({
         name: 'antd.less',
-        fileName: `antd.less`,
+        fileName: 'antd.less',
         type: 'asset',
         source: `
 @import "../es/style/index.less";
@@ -123,7 +125,6 @@ const _createStyleConfig = (file, format, files) => {
       }),
       postcss({
         extensions: ['.less', '.css', '.sss', '.pcss'],
-        extract: true,
         extract: path.resolve(`${styleDir}/index.css`.replace('components', dir)),
       }),
       createCssAndIndexFile({
@@ -144,7 +145,7 @@ const createStyleConfig = () => {
   console.log('files', files);
 
   return files.reduce((prev, file) => {
-    const result = ['esm', 'cjs'].map((format) => {
+    const result = (ROLLUP_WATCH ? ['esm'] : ['esm', 'cjs']).map((format) => {
       return _createStyleConfig(file, format, files);
     });
     // console.log('prev', prev, result)
@@ -153,7 +154,7 @@ const createStyleConfig = () => {
 };
 
 function createJsConfig() {
-  return ['esm', 'cjs', 'umd'].map((format) => {
+  return (ROLLUP_WATCH ? ['esm'] : ['esm', 'cjs', 'umd']).map((format) => {
     return {
       input: ['components/index.ts'],
       treeshake: false,
@@ -217,11 +218,10 @@ const umdCss = {
   plugins: [
     postcss({
       extensions: ['.less', '.css', '.sss', '.pcss'],
-      extract: true,
       extract: 'antd.css',
     }),
     createComponentsLessFile(),
   ],
 };
 
-module.exports = [...jsConfigs, ...styleConfigs, umdCss];
+module.exports = [...jsConfigs, ...styleConfigs, ROLLUP_WATCH ? null : umdCss].filter((item) => item);
