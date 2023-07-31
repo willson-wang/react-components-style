@@ -113,6 +113,7 @@ const _createStyleConfig = (file, format, files) => {
     },
     plugins: [
       copy({
+        // 将源目录下的less文件，原样copy一份到lib、es目录下
         copyOnce: true,
         targets: isStyleIndex
           ? [
@@ -124,10 +125,12 @@ const _createStyleConfig = (file, format, files) => {
           : [{ src: file, dest: styleDir.replace('components', dir) }],
       }),
       postcss({
+        // 将源目录下的.less文件转化成.css文件输出
         extensions: ['.less', '.css', '.sss', '.pcss'],
         extract: path.resolve(`${styleDir}/index.css`.replace('components', dir)),
       }),
       createCssAndIndexFile({
+        // 创建css.js、index.js、components.less文件
         dest: styleDir.replace('components/', ''),
         format,
         file,
@@ -137,10 +140,12 @@ const _createStyleConfig = (file, format, files) => {
   };
 };
 
+// 找到所有需要处理的入口less文件，其实就是每个组件下的less文件及公共style下的入口less文件
 const files = glob.sync('components/**/*.less', {
   ignore: ['**/themes/*.less', '**/mixins/*.less', '**/core/*.less'],
 });
 
+// 创建es、lib目录下的所有style下的.less、.css、.js文件
 const createStyleConfig = () => {
   console.log('files', files);
 
@@ -148,11 +153,11 @@ const createStyleConfig = () => {
     const result = (ROLLUP_WATCH ? ['esm'] : ['esm', 'cjs']).map((format) => {
       return _createStyleConfig(file, format, files);
     });
-    // console.log('prev', prev, result)
     return [...prev, ...result];
   }, []);
 };
 
+// 负责创建es、lib下的所有js文件及创建dist下的antd.js文件
 function createJsConfig() {
   return (ROLLUP_WATCH ? ['esm'] : ['esm', 'cjs', 'umd']).map((format) => {
     return {
@@ -207,11 +212,12 @@ function createJsConfig() {
 const styleConfigs = createStyleConfig();
 const jsConfigs = createJsConfig();
 
+// 创建dist/antd.css及dist/antd.less
 const umdCss = {
   input: files,
   output: {
     format: 'esm',
-    entryFileNames: '[name].my.js',
+    entryFileNames: '[name].js',
     exports: 'named',
     dir: 'dist',
   },

@@ -7,16 +7,16 @@ name: Node.js Package
 #   push:
 #     branches: main # main 分支提交时触发
 
-# on:
-#   push:
-#     tags:
-#       - '@*/*@*'
-
 on:
   push:
-    paths:
-      - 'package.json'
-    workflow_dispatch:
+    tags:
+      - '@*/*@*'
+
+# on:
+#   push:
+#     paths:
+#       - 'package.json'
+#     workflow_dispatch:
 
 jobs:
   # build:
