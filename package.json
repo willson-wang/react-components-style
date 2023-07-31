@@ -1,6 +1,6 @@
 {
   "name": "react-components-style",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "类antd 4.x组件样式",
   "author": "willson-wang",
   "main": "lib/index.js",
